@@ -54,7 +54,7 @@ std::istream& operator>>(std::istream& in, Movie& obj)
     in >> obj._startTime;
     in >> obj._duration;
    
-
+    return in;
 }
 
 std::ostream& operator<<(std::ostream& os, const Movie& movie) {

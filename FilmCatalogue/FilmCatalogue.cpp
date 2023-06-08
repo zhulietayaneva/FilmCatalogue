@@ -26,8 +26,7 @@ int main()
     std::ifstream outputFile("Cinema.txt", std::ios::binary);
     catalog1.deserialize(outputFile);
 
-    
-
+   
     return 0;
 }
 

@@ -14,14 +14,13 @@ const bool MovieCatalog::fileExists(const std::string& name) {
 
 MovieCatalog::MovieCatalog(const std::string& fileName) {
    
-    if (fileExists(fileName)) {
-        
         std::ifstream f(fileName);
-        f.open(fileName);
-        deserialize(f);
+    if (fileExists(fileName) && f.is_open()) {
+        
+        this->deserialize(f);
         f.close();
     }
-    else {
+    else{
         _cinemaName = fileName.substr(0, fileName.find_last_of("."));
         std::time_t currentTime = std::time(nullptr);
         std::tm* localTime = std::localtime(&currentTime);
@@ -43,36 +42,56 @@ MovieCatalog::~MovieCatalog() {
     _movies.push_back(movie);
 }
  void MovieCatalog::removeMovie(const std::string& movieTitle) {
-    auto it = std::find_if(_movies.begin(), _movies.end(), [&movieTitle](const Movie& movie) {
-        return movie.getTitle() == movieTitle;
-        });
-
-    if (it != _movies.end()) {
-        _movies.erase(it);
-    }
+   
+     for (size_t i = 0; i < _movies.size(); i++)
+     {
+         if (&_movies[i]==findMovie(movieTitle))
+         {
+             _movies.erase(_movies.begin() + i);
+         }
+     }
 }
 
 Movie* MovieCatalog::findMovie(const std::string& movieTitle) {
-    auto it = std::find_if(_movies.begin(), _movies.end(), [&movieTitle](const Movie& movie) {
-        return movie.getTitle() == movieTitle;
-        });
-
-    if (it != _movies.end()) {
-        return &(*it);
+    
+    for (auto& m : _movies)
+    {
+        if (m.getTitle()._Equal(movieTitle))
+        {
+            return &m;
+        }
     }
 
     return nullptr;
+
 }
 
 
+
+bool MovieCatalog::isMovieInTimeInterval(const Movie& movie, const Time& start, const Time& end) {
+    
+    int startTimeMinutes = start.hours * 60 + start.minutes;
+    int endTimeMinutes = end.hours * 60 + end.minutes;
+
+    // Calculate the end time of the movie
+    int movieEndTimeMinutes = movie.getStartTime().hours * 60 + movie.getStartTime().minutes + movie.getDuration();
+
+    // Check if the movie's start time is within the interval
+    // and if the movie's end time is after the start time of the interval
+    return (movie.getStartTime().hours * 60 + movie.getStartTime().minutes >= startTimeMinutes) &&
+        (movie.getStartTime().hours * 60 + movie.getStartTime().minutes <= endTimeMinutes) &&
+        (movieEndTimeMinutes >= startTimeMinutes);
+
+
+}
 int MovieCatalog::getMoviesCountInTimeInterval(const Time& startTime, const Time& endTime) {
     int count = 0;
 
-   /* for (const Movie& movie : _movies) {
+    for (const Movie& movie : _movies) {
         if (isMovieInTimeInterval(movie, startTime, endTime)) {
             count++;
         }
-    }*/
+    }
     //TODO  
     return count;
 }
@@ -139,16 +158,18 @@ const void MovieCatalog::serialize(std::ofstream& file) const {
     {
         m.serialize(file);
     }
+    file.close();
 }
-const void MovieCatalog::deserialize(std::ifstream& file, int lineNum)
+const void MovieCatalog::deserialize(std::ifstream& file)
 {
-    int currLine = 0;
+   
     std::string line;
-    std::getline(file, _cinemaName);
-    currLine++;// Read cinema name
 
     std::getline(file, line);
-    currLine++;
+    _cinemaName = line;   
+
+    std::getline(file, line);
+    
     std::istringstream dateStream(line);
     int day, month, year;
     char dot1, dot2;
@@ -157,14 +178,14 @@ const void MovieCatalog::deserialize(std::ifstream& file, int lineNum)
     
     while (std::getline(file, line)) {
         if (line.empty() ||line._Equal("\r") ||line._Equal("\r\n") || line._Equal("\r\r")) {
-            currLine++;
             continue;  
         }
-        currLine++;
-        Movie movie;
-        movie.deserialize(file,currLine); 
+        
+        Movie movie; 
+        movie.deserialize(file); 
 
         _movies.push_back(movie);
+        
     }
 }
 

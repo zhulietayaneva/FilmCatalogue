@@ -11,16 +11,16 @@ int main()
     Movie movie2("Inception", "Christopher Nolan", 2010, { 19, 0 }, 148);
     Movie movie3("Interstellar", "Christopher Nolan", 2014, { 18, 45 }, 169);
 
-    MovieCatalog catalog;
+    MovieCatalog catalog("Cinema");
 
     catalog.addMovie(movie1);
     catalog.addMovie(movie2);
     catalog.addMovie(movie3);
 
-    std::ofstream outputFile("Cinema.txt", std::ios::binary);
+    std::ofstream outputFile("catalog.txt", std::ios::binary);
     catalog.serialize(outputFile);
 
-    MovieCatalog catalog2("Cinema.txt");
+    MovieCatalog catalog2("catalog.txt");
 
  /*   std::cout << "Movie count: " << catalog.getMoviesCount() << std::endl;
 

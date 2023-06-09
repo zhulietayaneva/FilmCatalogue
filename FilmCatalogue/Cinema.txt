@@ -1,0 +1,21 @@
+Cinema
+9.6.2023
+
+Release Year: 1999
+Title: The Matrix
+Director: Lana Wachowski
+Start Time: 21:30
+Duration: 136
+
+Release Year: 2010
+Title: Inception
+Director: Christopher Nolan
+Start Time: 19:0
+Duration: 148
+
+Release Year: 2014
+Title: Interstellar
+Director: Christopher Nolan
+Start Time: 18:45
+Duration: 169
+

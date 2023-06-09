@@ -35,7 +35,7 @@ public:
     friend std::istream& operator>>(std::istream& in, Movie& obj);
     friend std::ostream& operator<<(std::ostream& os, const Movie& movie);
     const void serialize(std::ofstream& file)const override;
-    const void deserialize(std::ifstream& file, int lineNum=0) override;
+    const void deserialize(std::ifstream& file) override;
 
 
 };

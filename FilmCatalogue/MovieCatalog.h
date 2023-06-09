@@ -27,6 +27,7 @@ public:
 
     Movie* findMovie(const std::string& movieTitle);
 
+    bool isMovieInTimeInterval(const Movie& movie, const Time& start, const Time& end);
     int getMoviesCountInTimeInterval(const Time& startTime, const Time& endTime);
     const std::string getCinemaName() const;
     const Date getDate() const;
@@ -37,7 +38,7 @@ public:
     friend std::ostream& operator<<(std::ostream& os, const Date& obj);
     friend std::ostream& operator<< (std::ostream& out, const MovieCatalog& obj);
     const void serialize(std::ofstream& file) const override;
-    const void deserialize(std::ifstream& file, int lineNum=0) override;
+    const void deserialize(std::ifstream& file) override;
 };
 
 

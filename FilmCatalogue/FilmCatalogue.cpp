@@ -11,22 +11,27 @@ int main()
     Movie movie2("Inception", "Christopher Nolan", 2010, { 19, 0 }, 148);
     Movie movie3("Interstellar", "Christopher Nolan", 2014, { 18, 45 }, 169);
 
-    MovieCatalog catalog("Cinema");
+    MovieCatalog catalog;
 
     catalog.addMovie(movie1);
     catalog.addMovie(movie2);
     catalog.addMovie(movie3);
 
-    std::cout << "Movie count: " << catalog.getMoviesCount() << std::endl;
+    std::ofstream outputFile("Cinema.txt", std::ios::binary);
+    catalog.serialize(outputFile);
+
+    MovieCatalog catalog2("Cinema.txt");
+
+ /*   std::cout << "Movie count: " << catalog.getMoviesCount() << std::endl;
 
     std::cout << "Movies in range [19:00 - 22:00]:" << std::endl;
     int moviesDuringThisTIme= catalog.getMoviesCountInTimeInterval({ 19, 0 }, { 22, 0 });
     
     MovieCatalog catalog1;
     std::ifstream outputFile("Cinema.txt", std::ios::binary);
-    catalog1.deserialize(outputFile);
+    catalog1.deserialize(outputFile);*/
 
-   
+    ;
     return 0;
 }
 

@@ -2,7 +2,7 @@
 #include <fstream> 
 #include <cstring>
 #include <iostream>
-
+#include <sstream>
 
 
 void Movie::setTitle(std::string val) {
@@ -79,23 +79,37 @@ const void Movie::serialize(std::ofstream& file) const
     file << this->getStartTime().hours << ':' << this->getStartTime().minutes << '\n';
     file << this->getDuration() << '\n';
 }
-const void Movie::deserialize(std::ifstream& file)
+const void Movie::deserialize(std::ifstream& file, int lineNum)
 {
     if (!file.is_open()) {
         throw std::runtime_error("File is not open.");
     }
 
-    file >> _releaseYear;
-    file.ignore(); // Ignore the newline character
+    std::string line;
+    for (size_t i = 0; i <= lineNum; i++)
+    {
+        std::getline(file, line);
+    }
 
-    std::getline(file, _title);
-    std::getline(file, _director);
+    std::string title, director;
+    int year, startHour, startMinute, duration;
 
-    file >> _startTime.hours >> _startTime.minutes;
-    file.ignore(); // Ignore the newline character
+    std::getline(file, line);
+    title = line.substr(line.find(':') + 2);
 
-    file >> _duration;
-    file.ignore();
+    std::getline(file, line);
+    director = line.substr(line.find(':') + 2);
+
+    std::getline(file, line);
+    year = std::stoi(line.substr(line.find(':') + 2));
+
+    std::getline(file, line);
+    std::stringstream timeStream(line.substr(line.find(':') + 2));
+    timeStream >> startHour >> startMinute;
+
+    std::getline(file, line);
+    duration = std::stoi(line.substr(line.find(':') + 2));
+
 }
 
 

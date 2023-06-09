@@ -11,7 +11,7 @@ struct Date {
 
 class MovieCatalog : public Serializeable {
 private:
-    std::string _cinemaName;
+    std::string _cinemaName = "Default Name";
     Date _projectionDate = { 0,0 };
     std::vector<Movie> _movies;
 
@@ -37,7 +37,7 @@ public:
     friend std::ostream& operator<<(std::ostream& os, const Date& obj);
     friend std::ostream& operator<< (std::ostream& out, const MovieCatalog& obj);
     const void serialize(std::ofstream& file) const override;
-    const void deserialize(std::ifstream& file) override;
+    const void deserialize(std::ifstream& file, int lineNum=0) override;
 };
 
 

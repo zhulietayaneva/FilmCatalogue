@@ -94,9 +94,9 @@ const int MovieCatalog::getMoviesCount() const
 }
 
 
-std::istream& operator>>(std::istream& input, Date& time) {
-    input >> time.day >> time.month>> time.year;
-    return input;
+std::istream& operator>>(std::istream& in, Date& time) {
+    in >> time.day >> time.month>> time.year;
+    return in;
 }
 std::istream& operator>>(std::istream& in, MovieCatalog& obj)
 {   
@@ -110,10 +110,10 @@ std::istream& operator>>(std::istream& in, MovieCatalog& obj)
     }
     return in;
 }
-std::ostream& operator<<(std::ostream& os, const Date& obj)
+std::ostream& operator<<(std::ostream& out, const Date& obj)
 {
-    os << obj.day << "." << obj.month << "." << obj.year << std::endl;
-    return os;
+    out << obj.day << "." << obj.month << "." << obj.year << std::endl;
+    return out;
 }
 std::ostream& operator<< (std::ostream& out, const MovieCatalog& obj)
 {
@@ -137,15 +137,18 @@ const void MovieCatalog::serialize(std::ofstream& file) const {
     file << _projectionDate << std::endl;
     for  (auto& m : _movies)
     {
-        file << m <<std::endl;
+        m.serialize(file);
     }
 }
-const void MovieCatalog::deserialize(std::ifstream& file)
+const void MovieCatalog::deserialize(std::ifstream& file, int lineNum)
 {
+    int currLine = 0;
     std::string line;
-    std::getline(file, _cinemaName);  // Read cinema name
+    std::getline(file, _cinemaName);
+    currLine++;// Read cinema name
 
     std::getline(file, line);
+    currLine++;
     std::istringstream dateStream(line);
     int day, month, year;
     char dot1, dot2;
@@ -154,31 +157,12 @@ const void MovieCatalog::deserialize(std::ifstream& file)
     
     while (std::getline(file, line)) {
         if (line.empty() ||line._Equal("\r") ||line._Equal("\r\n") || line._Equal("\r\r")) {
+            currLine++;
             continue;  
         }
-
-
-        std::string title, director;
-        int year, startHour, startMinute, duration;
-
-          // Read "Title: ..."
-        title = line.substr(line.find(':') + 2);  // Extract title
-
-        std::getline(file, line);  // Read "Director: ..."
-        director = line.substr(line.find(':') + 2);  // Extract director
-
-        std::getline(file, line);  // Read "Year: ..."
-        year = std::stoi(line.substr(line.find(':') + 2));  // Extract year
-
-        std::getline(file, line);  // Read "Start Time: ..."
-        std::stringstream timeStream(line.substr(line.find(':') + 2));
-        timeStream >> startHour >> startMinute;  // Extract start time
-
-        std::getline(file, line);  // Read "Duration: ..."
-        duration = std::stoi(line.substr(line.find(':') + 2));  // Extract duration
-
-        // Create Movie object using constructor with arguments
-        Movie movie(title, director, year, { startHour, startMinute }, duration);
+        currLine++;
+        Movie movie;
+        movie.deserialize(file,currLine); 
 
         _movies.push_back(movie);
     }

@@ -72,12 +72,9 @@ bool MovieCatalog::isMovieInTimeInterval(const Movie& movie, const Time& start, 
     
     int startTimeMinutes = start.hours * 60 + start.minutes;
     int endTimeMinutes = end.hours * 60 + end.minutes;
-
-    // Calculate the end time of the movie
+    
     int movieEndTimeMinutes = movie.getStartTime().hours * 60 + movie.getStartTime().minutes + movie.getDuration();
-
-    // Check if the movie's start time is within the interval
-    // and if the movie's end time is after the start time of the interval
+   
     return (movie.getStartTime().hours * 60 + movie.getStartTime().minutes >= startTimeMinutes) &&
         (movie.getStartTime().hours * 60 + movie.getStartTime().minutes <= endTimeMinutes) &&
         (movieEndTimeMinutes >= startTimeMinutes);
@@ -92,7 +89,7 @@ int MovieCatalog::getMoviesCountInTimeInterval(const Time& startTime, const Time
             count++;
         }
     }
-    //TODO  
+      
     return count;
 }
 const std::string MovieCatalog::getCinemaName() const

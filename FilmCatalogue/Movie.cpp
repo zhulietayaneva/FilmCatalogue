@@ -77,7 +77,9 @@ const void Movie::serialize(std::ofstream& file) const
 	file << "Release Year: " << this->getReleaseYear()<< std::endl;	
 	file << "Title: " << this->getTitle() << std::endl;
 	file << "Director: " << this->getDirector() << std::endl;
-	file << "Start Time: " << this->getStartTime().hours << ':' << this->getStartTime().minutes << std::endl;
+	std::string hours = this->getStartTime().hours < 10 ? "0"+std::to_string(this->_startTime.hours) : std::to_string(this->getStartTime().hours);
+	std::string minutes = this->getStartTime().minutes < 10 ? "0" + std::to_string(this->getStartTime().minutes) : std::to_string(this->getStartTime().minutes);
+	file << "Start Time: " << hours << ':' << minutes << std::endl;
 	file << "Duration: " << this->getDuration() << std::endl;
 	file <<  std::endl;
 }
@@ -88,27 +90,24 @@ const void Movie::deserialize(std::ifstream& file)
 	}
 	
 	std::string line;
-	std::string title, director;
-	int year, startHour, startMinute, duration;
-
 	
 	file.seekg(file.tellg());
 	std::getline(file, line);
-	year = std::stoi(line.substr(line.find(": ") + 2));
+	this->_releaseYear = std::stoi(line.substr(line.find(": ") + 2));
 
 
 	std::getline(file, line);
-	title = line.substr(line.find(": ") + 2);
+	this->_title = line.substr(line.find(": ") + 2);
 
 	std::getline(file, line);
-	director = line.substr(line.find(": ") + 2);
+	this->_director = line.substr(line.find(": ") + 2);
 
 	std::getline(file, line);
 	std::stringstream timeStream(line.substr(line.find(": ") + 2));
-	timeStream >> startHour >> startMinute;
+	timeStream >> this->_startTime.hours >> this->_startTime.minutes;
 	
 	std::getline(file, line);
-	duration = std::stoi(line.substr(line.find(": ") + 2));
+	this->_duration = std::stoi(line.substr(line.find(": ") + 2));
 
 
 

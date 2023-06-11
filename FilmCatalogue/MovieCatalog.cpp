@@ -12,6 +12,19 @@ const bool MovieCatalog::fileExists(const std::string& name) {
     return f.good();
 }
 
+void MovieCatalog::setCinemaName(const std::string& val)
+{
+    if (val.empty())
+    {
+        throw std::invalid_argument("Invalid input argument: Empty cinema name.");
+
+    }
+    else
+    {
+        _cinemaName = val;
+    }
+}
+
 MovieCatalog::MovieCatalog(const std::string& fileName) {
    
         std::ifstream f(fileName);
@@ -48,6 +61,7 @@ MovieCatalog::~MovieCatalog() {
          if (&_movies[i]==findMovie(movieTitle))
          {
              _movies.erase(_movies.begin() + i);
+             break; 
          }
      }
 }
@@ -63,10 +77,15 @@ Movie* MovieCatalog::findMovie(const std::string& movieTitle) {
     }
 
     return nullptr;
-
 }
 
 
+
+void MovieCatalog::changeCinemaName(const std::string& name)
+{
+    this->setCinemaName(name);
+
+}
 
 bool MovieCatalog::isMovieInTimeInterval(const Movie& movie, const Time& start, const Time& end) {
     
@@ -87,7 +106,7 @@ int MovieCatalog::getMoviesCountInTimeInterval(const Time& startTime, const Time
     for (const Movie& movie : _movies) {
         if (isMovieInTimeInterval(movie, startTime, endTime)) {
             count++;
-            std::cout << movie;
+            //std::cout << movie;
         }
     }
       

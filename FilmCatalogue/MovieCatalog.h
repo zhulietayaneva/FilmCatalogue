@@ -16,6 +16,7 @@ private:
     std::vector<Movie> _movies;
 
    const bool fileExists(const std::string& name);
+   void setCinemaName(const std::string& val);
 
 public:
     MovieCatalog() = default;
@@ -27,6 +28,7 @@ public:
 
     Movie* findMovie(const std::string& movieTitle);
 
+    void changeCinemaName(const std::string& name);
     bool isMovieInTimeInterval(const Movie& movie, const Time& start, const Time& end);
     int getMoviesCountInTimeInterval(const Time& startTime, const Time& endTime);
     const std::string getCinemaName() const;

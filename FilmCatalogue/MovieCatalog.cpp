@@ -73,11 +73,11 @@ bool MovieCatalog::isMovieInTimeInterval(const Movie& movie, const Time& start, 
     int startTimeMinutes = start.hours * 60 + start.minutes;
     int endTimeMinutes = end.hours * 60 + end.minutes;
     
+    int movieStartTimeMinutes = movie.getStartTime().hours * 60 + movie.getStartTime().minutes;
     int movieEndTimeMinutes = movie.getStartTime().hours * 60 + movie.getStartTime().minutes + movie.getDuration();
-   
-    return (movie.getStartTime().hours * 60 + movie.getStartTime().minutes >= startTimeMinutes) &&
-        (movie.getStartTime().hours * 60 + movie.getStartTime().minutes <= endTimeMinutes) &&
-        (movieEndTimeMinutes >= startTimeMinutes);
+
+    return (movieStartTimeMinutes >= startTimeMinutes) &&
+           (movieEndTimeMinutes <= endTimeMinutes);
 
 
 }
@@ -87,6 +87,7 @@ int MovieCatalog::getMoviesCountInTimeInterval(const Time& startTime, const Time
     for (const Movie& movie : _movies) {
         if (isMovieInTimeInterval(movie, startTime, endTime)) {
             count++;
+            std::cout << movie;
         }
     }
       

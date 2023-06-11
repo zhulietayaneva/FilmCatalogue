@@ -20,18 +20,13 @@ int main()
     std::ofstream outputFile("catalog.txt", std::ios::binary);
     catalog.serialize(outputFile);
 
-    MovieCatalog catalog2("catalog.txt");
+    MovieCatalog* catalog2 = new MovieCatalog("catalog.txt");
 
- /*   std::cout << "Movie count: " << catalog.getMoviesCount() << std::endl;
+   
+    int moviesDuringThisTIme = catalog.getMoviesCountInTimeInterval({ 19, 0 }, { 22, 0 });
+    std::cout << "Movies in range [19:00 - 22:00] ("<<moviesDuringThisTIme<<") :" << std::endl;
 
-    std::cout << "Movies in range [19:00 - 22:00]:" << std::endl;
-    int moviesDuringThisTIme= catalog.getMoviesCountInTimeInterval({ 19, 0 }, { 22, 0 });
-    
-    MovieCatalog catalog1;
-    std::ifstream outputFile("Cinema.txt", std::ios::binary);
-    catalog1.deserialize(outputFile);*/
-
-    ;
+  
     return 0;
 }
 
